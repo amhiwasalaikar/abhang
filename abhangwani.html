@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>अभंग संग्रह</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+  --bg:#f8f3e8;
+  --card:#ffffff;
+  --text:#2f2f2f;
+  --accent:#8B5E3C;
+}
+
+body.dark{
+  --bg:#121212;
+  --card:#1e1e1e;
+  --text:#ffffff;
+}
+
+body{
+  margin:0;
+  font-family:'Noto Sans Devanagari', sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:0.3s;
+}
+
+.container{
+  max-width:500px;
+  margin:auto;
+  padding:15px;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+h1{
+  margin:0;
+  font-size:24px;
+  color:var(--accent);
+}
+
+button{
+  border:none;
+  padding:8px 10px;
+  border-radius:6px;
+  cursor:pointer;
+  background:var(--accent);
+  color:white;
+  margin-left:5px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  box-sizing:border-box;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:16px;
+}
+
+textarea{
+  height:220px;
+}
+
+.abhang-item{
+  background:var(--card);
+  margin-bottom:10px;
+  padding:14px;
+  border-radius:10px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 2px 4px rgba(0,0,0,0.08);
+}
+
+.hidden{
+  display:none;
+}
+
+#detailText{
+  white-space:pre-line;
+  line-height:1.9;
+  font-size:18px;
+  margin-top:20px;
+}
+
+.top-buttons{
+  display:flex;
+  gap:5px;
+  margin-bottom:10px;
+}
+
+.favorite{
+  font-size:24px;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.footer{
+  text-align:center;
+  margin-top:30px;
+  opacity:0.7;
+  font-size:12px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LIST VIEW -->
+
+<div id="listView">
+
+<div class="header">
+
+<h1>अभंग संग्रह</h1>
+
+<div>
+
+<button onclick="toggleDark()">🌙</button>
+
+<button onclick="openAdmin()">➕</button>
+
+</div>
+
+</div>
+
+<input id="searchBox" placeholder="अभंग शोधा...">
+
+<select id="saintFilter">
+
+<option value="all">सर्व संत</option>
+
+<option value="tukaram"> संत तुकाराम </option>
+<option value="dnyaneshwar"> संत ज्ञानेश्वर </option>
+<option value="namdev"> संत नामदेव </option>
+<option value="eknath"> संत एकनाथ </option>
+<option value="nilobarai"> संत निळोबाराय </option>
+<option value="gorakumbhar"> संत गोरा कुंभार </option>
+<option value="savtamali"> संत सावता माळी </option>
+<option value="naraharisonar"> संत नरहरी सोनार </option>
+<option value="senanhavi"> संत सेना न्हावी </option>
+<option value="janabai"> संत जनाबाई </option>
+<option value="kanhopatra"> संत कान्होपात्रा </option>
+<option value="bahinabai"> संत बहिणाबाई </option>
+<option value="samarthramdas"> समर्थ रामदास स्वामी </option>
+<option value="muktabai"> संत मुक्ताबाई </option>
+<option value="bhanudas"> संत भानुदास </option>
+<option value="tukadoji"> संत तुकडोजी </option>
+<option value="kabir"> संत कबीर </option>
+<option value="mirabai"> संत मीराबाई </option>
+<option value="other"> इतर संत मंडळी </option>
+
+</select>
+
+<div id="abhangList"></div>
+
+</div>
+
+
+
+<!-- DETAIL VIEW -->
+
+<div id="detailView" class="hidden">
+
+<div class="top-buttons">
+
+<button onclick="goBack()">← परत</button>
+
+<button onclick="increaseFont()">A+</button>
+
+<button onclick="decreaseFont()">A-</button>
+
+</div>
+
+<h2 id="detailTitle"></h2>
+
+<div
+id="favoriteBtn"
+class="favorite"
+onclick="toggleFavoriteCurrent()"
+>
+☆
+</div>
+
+<div id="detailText"></div>
+
+</div>
+
+
+
+<!-- ADMIN VIEW -->
+
+<div id="adminView" class="hidden">
+
+<button onclick="backToHome()">
+← परत
+</button>
+
+<h2>नवीन अभंग जोडा</h2>
+
+<input
+id="newTitle"
+placeholder="अभंग शीर्षक"
+>
+
+<select id="newSaint">
+
+<option value="tukaram"> संत तुकाराम </option>
+<option value="dnyaneshwar"> संत ज्ञानेश्वर </option>
+<option value="namdev"> संत नामदेव </option>
+<option value="eknath"> संत एकनाथ </option>
+<option value="nilobarai"> संत निळोबाराय </option>
+<option value="gorakumbhar"> संत गोरा कुंभार </option>
+<option value="savtamali"> संत सावता माळी </option>
+<option value="naraharisonar"> संत नरहरी सोनार </option>
+<option value="senanhavi"> संत सेना न्हावी </option>
+<option value="janabai"> संत जनाबाई </option>
+<option value="kanhopatra"> संत कान्होपात्रा </option>
+<option value="bahinabai"> संत बहिणाबाई </option>
+<option value="samarthramdas"> समर्थ रामदास स्वामी </option>
+<option value="muktabai"> संत मुक्ताबाई </option>
+<option value="bhanudas"> संत भानुदास </option>
+<option value="tukadoji"> संत तुकडोजी </option>
+<option value="kabir"> संत कबीर </option>
+<option value="mirabai"> संत मीराबाई </option>
+<option value="other"> इतर संत मंडळी </option>
+
+</select>
+
+<textarea
+id="newText"
+placeholder="पूर्ण अभंग लिहा..."
+></textarea>
+
+<button onclick="saveNewAbhang()">
+Save Abhang
+</button>
+
+<p id="saveMessage"></p>
+
+</div>
+
+<div class="footer">
+
+विठ्ठल विठ्ठल 🙏
+
+</div>
+
+</div>
+
+
+
+<script>
+
+/* DEFAULT DATA */
+
+const defaultAbhangs = [
+
+{
+id:1,
+title:"सुंदर ते ध्यान",
+saint:"tukaram",
+text:`सुंदर ते ध्यान उभे विटेवरी ।
+कर कटावरी ठेवूनियां ॥१॥
+तुळसी हार गळां कासे पीतांबर ।
+आवडे निरंतर हेंचि ध्यान ॥ध्रु.॥
+मकरकुंडले तळपती श्रवणी ।
+कंठी कौस्तुभमणि विराजित ॥२॥
+तुका म्हणे माझे हेचि सर्व सुख ।
+पाहीन श्रीमुख आवडीनें ॥३॥`
+},
+
+{
+id:2,
+title:"रूप पाहतां लोचनीं",
+saint:"dnyaneshwar",
+text:`रूप पाहतां लोचनीं । 
+सुख जालें वो साजणी ॥१॥ 
+तो हा विठ्ठल बरवा । 
+तो हा माधव बरवा ॥२॥ 
+बहुतां सुकृतांची जोडी । 
+ह्मणुनि विठ्ठलीं आवडी ॥३॥ 
+सर्व सुखाचें आगर । 
+बाप रखुमादेवीवर ॥४॥`
+},
+
+{
+id:3,
+title:"माझे माहेर पंढरी",
+saint:"tukaram",
+text:`माझे माहेर पंढरी |
+आहे भीवरेच्या तीरी ॥धृ॥
+
+बाप आणि आई |
+माझी विठ्ठल रखुमाई ॥१॥
+
+पुंडलिक राहे बंधू |
+त्याची ख्याती काय सांगू ॥२॥
+
+माझी बहिण चंद्रभागा |
+करितसे पाप भंगा ॥३॥
+
+एका जनार्दनी शरण |
+करी माहेरची आठवण ॥४॥`
+}
+
+];
+
+
+/* FIRST TIME STORAGE */
+
+if(!localStorage.getItem("abhangs")){
+
+ localStorage.setItem(
+ "abhangs",
+ JSON.stringify(defaultAbhangs)
+ );
+
+}
+
+
+/* APP STATE */
+
+let currentAbhang=null;
+
+let favorites=
+JSON.parse(
+localStorage.getItem("favorites")
+) || [];
+
+let fontSize=
+parseInt(
+localStorage.getItem("fontSize")
+) || 18;
+
+
+/* GET DATA */
+
+function getAbhangs(){
+
+ return JSON.parse(
+ localStorage.getItem("abhangs")
+ ) || [];
+
+}
+
+
+/* LOAD LIST WITH AUTO ASC SORT */
+
+function loadList(){
+
+ let abhangs=getAbhangs();
+
+ let search=
+ document
+ .getElementById("searchBox")
+ .value
+ .toLowerCase();
+
+ let saint=
+ document
+ .getElementById("saintFilter")
+ .value;
+
+ let list=
+ document
+ .getElementById("abhangList");
+
+ list.innerHTML="";
+
+ let filtered=
+ abhangs
+
+ .filter(a=>{
+
+   let matchSearch=
+   a.title
+   .toLowerCase()
+   .includes(search);
+
+   let matchSaint=
+   saint==="all"
+   || a.saint===saint;
+
+   return matchSearch && matchSaint;
+
+ })
+
+ /* AUTO ASCENDING SORT */
+
+ .sort((a,b)=>
+
+   a.title.localeCompare(
+     b.title,
+     "mr-IN"
+   )
+
+ );
+
+
+ filtered.forEach(abhang=>{
+
+  let div=
+  document.createElement("div");
+
+  div.className="abhang-item";
+
+  let star=
+  favorites.includes(abhang.id)
+  ? "⭐"
+  : "☆";
+
+  div.innerHTML=
+  `<span>${star} ${abhang.title}</span>`;
+
+  div.onclick=
+  ()=>openAbhang(abhang);
+
+  list.appendChild(div);
+
+ });
+
+}
+
+
+
+/* OPEN READER */
+
+function openAbhang(abhang){
+
+ currentAbhang=abhang;
+
+ hideAll();
+
+ document
+ .getElementById("detailView")
+ .classList.remove("hidden");
+
+ document
+ .getElementById("detailTitle")
+ .innerText=abhang.title;
+
+ document
+ .getElementById("detailText")
+ .innerText=abhang.text;
+
+ applyFont();
+
+ updateFavoriteButton();
+
+}
+
+
+
+/* HIDE ALL */
+
+function hideAll(){
+
+ document
+ .getElementById("listView")
+ .classList.add("hidden");
+
+ document
+ .getElementById("detailView")
+ .classList.add("hidden");
+
+ document
+ .getElementById("adminView")
+ .classList.add("hidden");
+
+}
+
+
+
+/* BACK */
+
+function goBack(){
+
+ hideAll();
+
+ document
+ .getElementById("listView")
+ .classList.remove("hidden");
+
+ loadList();
+
+}
+
+function backToHome(){
+
+ goBack();
+
+}
+
+
+
+/* ADMIN */
+
+function openAdmin(){
+
+ hideAll();
+
+ document
+ .getElementById("adminView")
+ .classList.remove("hidden");
+
+}
+
+
+function saveNewAbhang(){
+
+ let title=
+ document
+ .getElementById("newTitle")
+ .value
+ .trim();
+
+ let saint=
+ document
+ .getElementById("newSaint")
+ .value;
+
+ let text=
+ document
+ .getElementById("newText")
+ .value
+ .trim();
+
+ if(!title || !text){
+
+   alert("माहिती भरा");
+
+   return;
+
+ }
+
+ let abhangs=getAbhangs();
+
+ let newAbhang={
+
+   id:Date.now(),
+
+   title:title,
+
+   saint:saint,
+
+   text:text
+
+ };
+
+ abhangs.push(newAbhang);
+
+ localStorage.setItem(
+ "abhangs",
+ JSON.stringify(abhangs)
+ );
+
+ document
+ .getElementById("newTitle")
+ .value="";
+
+ document
+ .getElementById("newText")
+ .value="";
+
+ document
+ .getElementById("saveMessage")
+ .innerText="अभंग सेव झाला ✅";
+
+}
+
+
+
+/* FAVORITES */
+
+function toggleFavorite(id){
+
+ if(favorites.includes(id)){
+
+   favorites=
+   favorites.filter(
+   x=>x!==id
+   );
+
+ }else{
+
+   favorites.push(id);
+
+ }
+
+ localStorage.setItem(
+ "favorites",
+ JSON.stringify(favorites)
+ );
+
+}
+
+
+function toggleFavoriteCurrent(){
+
+ toggleFavorite(currentAbhang.id);
+
+ updateFavoriteButton();
+
+}
+
+
+function updateFavoriteButton(){
+
+ let btn=
+ document
+ .getElementById("favoriteBtn");
+
+ btn.innerHTML=
+ favorites.includes(currentAbhang.id)
+ ? "⭐"
+ : "☆";
+
+}
+
+
+
+/* FONT SIZE */
+
+function increaseFont(){
+
+ fontSize+=2;
+
+ applyFont();
+
+}
+
+function decreaseFont(){
+
+ fontSize-=2;
+
+ if(fontSize<14)
+ fontSize=14;
+
+ applyFont();
+
+}
+
+function applyFont(){
+
+ document
+ .getElementById("detailText")
+ .style.fontSize=
+ fontSize+"px";
+
+ localStorage.setItem(
+ "fontSize",
+ fontSize
+ );
+
+}
+
+
+
+/* DARK MODE */
+
+function toggleDark(){
+
+ document.body
+ .classList.toggle("dark");
+
+ localStorage.setItem(
+
+ "darkMode",
+
+ document.body
+ .classList.contains("dark")
+
+ );
+
+}
+
+
+if(
+localStorage.getItem("darkMode")
+==="true"
+){
+
+ document.body.classList.add("dark");
+
+}
+
+
+
+/* EVENTS */
+
+document
+.getElementById("searchBox")
+.addEventListener(
+"input",
+loadList
+);
+
+document
+.getElementById("saintFilter")
+.addEventListener(
+"change",
+loadList
+);
+
+
+
+/* START */
+
+loadList();
+
+</script>
+
+</body>
+</html>
